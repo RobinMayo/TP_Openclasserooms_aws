@@ -6,7 +6,6 @@ data "aws_ami" "ami_amzn2_linux" {
     name   = "name"
     values = ["amzn2-ami-hvm*x86*"]
   }
-
 }
 
 resource "aws_instance" "ec2" {
@@ -16,8 +15,17 @@ resource "aws_instance" "ec2" {
   vpc_security_group_ids = ["${aws_security_group.allow_http.id}"]
   user_data              = "${data.template_file.user_data.rendered}"
 
+  root_block_device {
+    volume_size = "10"
+  }
+
   tags = {
     Name  = "${var.environment}-${var.application}-linuxEC2"
+    Owner = "${var.owner}"
+  }
+
+  volume_tags = {
+    Name  = "${var.environment}-${var.application}-linux-volume"
     Owner = "${var.owner}"
   }
 }
