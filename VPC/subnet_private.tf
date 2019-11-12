@@ -2,6 +2,11 @@
 
 resource "aws_eip" "nat_gateway_eip" {
   vpc = true
+
+  tags = {
+    Name  = "${lower("${var.environment}-${var.application}-eip")}"
+    Owner = "${var.owner}"
+  }
 }
 
 

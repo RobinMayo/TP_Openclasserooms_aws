@@ -15,6 +15,11 @@ resource "aws_instance" "ec2" {
   subnet_id              = "${element(aws_subnet.public.*.id, 1)}"
   vpc_security_group_ids = ["${aws_security_group.allow_http.id}"]
   user_data              = "${data.template_file.user_data.rendered}"
+
+  tags = {
+    Name  = "${var.environment}-${var.application}-linuxEC2"
+    Owner = "${var.owner}"
+  }
 }
 
 
@@ -34,6 +39,11 @@ resource "aws_security_group" "allow_http" {
     to_port     = 0
     protocol    = "-1"
     cidr_blocks = ["${var.cidr_public}"]
+  }
+
+  tags = {
+    Name  = "${var.environment}-${var.application}-allow_http-security_group"
+    Owner = "${var.owner}"
   }
 }
 
