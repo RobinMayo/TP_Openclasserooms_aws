@@ -12,8 +12,9 @@ resource "aws_instance" "ec2" {
   ami                    = "${data.aws_ami.ami_amzn2_linux.id}"
   instance_type          = "t2.micro"
   subnet_id              = "${element(aws_subnet.public.*.id, 1)}"
-  vpc_security_group_ids = ["${aws_security_group.allow_http.id}"]
+  vpc_security_group_ids = ["${aws_security_group.allow_tcp.id}"]
   user_data              = "${data.template_file.user_data.rendered}"
+  key_name               = "LinuxKeyOne"
 
   root_block_device {
     volume_size = "10"
@@ -31,9 +32,9 @@ resource "aws_instance" "ec2" {
 }
 
 
-resource "aws_security_group" "allow_http" {
-  name        = "allow_http"
-  description = "Allow HTTP inbound traffic"
+resource "aws_security_group" "allow_tcp" {
+  name        = "allow_tcp"
+  description = "Allow TCP inbound traffic"
   vpc_id      = "${aws_vpc.vpc.id}"
 
   ingress {
@@ -50,7 +51,7 @@ resource "aws_security_group" "allow_http" {
   }
 
   tags = {
-    Name  = "${var.environment}-${var.application}-allow_http-security_group"
+    Name  = "${var.environment}-${var.application}-allow_tcp-security_group"
     Owner = "${var.owner}"
   }
 }

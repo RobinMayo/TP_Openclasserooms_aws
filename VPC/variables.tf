@@ -56,5 +56,5 @@ variable "protocol" {
 }
 
 variable "default_port" {
-  default = "80"
+  default = "22"
 }
